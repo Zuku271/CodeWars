@@ -9,26 +9,25 @@ class BuyCar
 std::vector<int> BuyCar::nbMonths(int startPriceOld, int startPriceNew, int savingperMonth, double percentLossByMonth)
 {
     int saving = 0;
-    double actualPriceOld = log10(startPriceOld);
-    double actualPriceNew = log10(startPriceNew);
+    double actualPriceOld = startPriceOld;
+    double actualPriceNew = startPriceNew;
     std::vector<int> result;
 
     int month = 0;
-    while(saving+pow(10, actualPriceOld) < pow(10, actualPriceNew))
+    while(saving+actualPriceOld < actualPriceNew)
     {
-        month++;
-        saving = (saving) + savingperMonth;
+        month += 1;
+        saving += savingperMonth;
         
         if (month%2 == 0)
         {
           percentLossByMonth += 0.5;
         }
-        actualPriceOld = (actualPriceOld + log10(100.0-percentLossByMonth))-2;
-        actualPriceNew = (actualPriceNew + log10(100.0-percentLossByMonth))-2;
-
+        actualPriceOld = ((100.0-percentLossByMonth) * actualPriceOld)/100.0;
+        actualPriceNew = ((100.0-percentLossByMonth) * actualPriceNew)/100.0;
     }
     
     result.push_back(month);
-    result.push_back(saving+pow(10, actualPriceOld) - pow(10, actualPriceNew));
+    result.push_back(round(saving+actualPriceOld - actualPriceNew));
     return result;
 }
